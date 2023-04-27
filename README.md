@@ -7,7 +7,10 @@ This is a little workaround to automate the export of multiple Notion url's usin
 Before starting to use this project, as every workaround created in a few hours, there is an effort to configure the Notion authentication token, the another cookies and map the URLs for export.
 
 ## Git clone
-Run `git clone git@github.com:jefferson-amorim/notion-pdf-exporter.git` in terminal and `cd ./notion-pdf-exporter`.
+Run in terminal:
+- `git clone git@github.com:jefferson-amorim/notion-pdf-exporter.git`
+- `cd ./notion-pdf-exporter`
+- `npm i`
 
 ## Configure the .env file
 
