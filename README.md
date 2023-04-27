@@ -26,7 +26,7 @@ The name of the cookie is "token_v2" and you will not have access through `docum
 
 ## Configure the .notion-cookies
 
-Taking advantage of being logged in and with devtools open and:
+Assuming you're still logged in and have devtools open:
 - Open the devtools console;
 - Execute `copy(document.cookie)` to copy cookies content to clipboard;
 - Create the `.notion-cookies` file based on the `.notion-cookies-sample`;
