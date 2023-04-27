@@ -1,10 +1,10 @@
 # notion-pdf-exporter
 
-This is a little workaround to automate the export of multiple Notion url's using `puppeteer.js` to emulate a user's navigation.
+This is a little workaround to automate the export of multiple URLs from Notion using `puppeteer.js` to emulate a user's navigation.
 
 # How to use
 
-Before starting to use this project, as every workaround created in a few hours, there is an effort to configure the Notion authentication token, the another cookies and map the URLs for export.
+Before starting to use this project, like every workaround created in a few hours, there is an effort to configure the Notion authentication token, the other cookies and map the URLs to be exported.
 
 ## Git clone
 Run in terminal:
