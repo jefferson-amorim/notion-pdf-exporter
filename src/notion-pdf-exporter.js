@@ -29,7 +29,7 @@ async function waitUntilDownload(client) {
 }
 
 async function exportPdf({ notionUrl, notionCookies }) {
-    const browser = await puppeteer.launch({headless: 'new', /*, userDataDir: path.resolve('./user-data') */});
+    const browser = await puppeteer.launch({headless: 'new', });
     const page = await browser.newPage();
     const client = await page.target().createCDPSession();
 
@@ -50,14 +50,22 @@ async function exportPdf({ notionUrl, notionCookies }) {
 
     // Open menu.
     await page.click('.notion-topbar-more-button');
+
+    // Wait for menu.
     await page.waitForSelector('.notion-scroller.vertical > div[role=menu]');
 
+    // Wait for connection menu items.
+    await page.waitForTimeout(3000);
+
+    // Wait for export menuitem
+    await page.waitForSelector('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div:nth-child(2) > div > div > div > div > div > div:nth-child(1) > div:nth-child(7) > div:nth-child(2)');
+
     // Open export modal
-    await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div:nth-child(2) > div > div > div > div > div > div:nth-child(1) > div:nth-child(7) > div[role=menuitem]:nth-child(2)');
-    await page.waitForSelector('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(1) > div:nth-child(2)');
+    await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div:nth-child(2) > div > div > div > div > div > div:nth-child(1) > div:nth-child(7) > div:nth-child(2)');
+    await page.waitForSelector('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(1) > div[role=button]');
 
     // Open export options
-    await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(1) > div:nth-child(2)')
+    await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(1) > div[role=button]')
     await page.waitForSelector('.notion-overlay-container.notion-default-overlay-container > div:nth-child(3) > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) div[role=menu] div[role=menuitem]:nth-child(1)');
 
     // Select PDF type
