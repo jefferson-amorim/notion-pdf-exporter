@@ -29,7 +29,7 @@ async function waitUntilDownload(client) {
 }
 
 async function exportPdf({ notionUrl, notionCookies }) {
-    const browser = await puppeteer.launch({headless: 'new', });
+    const browser = await puppeteer.launch({headless: false, })// .launch({headless: 'new', });
     const page = await browser.newPage();
     const client = await page.target().createCDPSession();
 
@@ -55,12 +55,13 @@ async function exportPdf({ notionUrl, notionCookies }) {
     await page.waitForSelector('.notion-scroller.vertical > div[role=menu]');
 
     // Wait for connection menu items.
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(10000);
 
     // Wait for export menuitem
     await page.waitForSelector('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div:nth-child(2) > div > div > div > div > div > div:nth-child(1) > div:nth-child(7) > div:nth-child(2)');
 
     // Open export modal
+    // await page.click("#id_50")
     await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div:nth-child(2) > div > div > div > div > div > div:nth-child(1) > div:nth-child(7) > div:nth-child(2)');
     await page.waitForSelector('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(1) > div[role=button]');
 
@@ -69,17 +70,33 @@ async function exportPdf({ notionUrl, notionCookies }) {
     await page.waitForSelector('.notion-overlay-container.notion-default-overlay-container > div:nth-child(3) > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) div[role=menu] div[role=menuitem]:nth-child(1)');
 
     // Select PDF type
-    await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(3) > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) div[role=menu] div[role=menuitem]:nth-child(1)')
-    await page.waitForSelector('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(6) > div.pseudoHover > input[type=checkbox]')
+    // await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(3) > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) div[role=menu] div[role=menuitem]:nth-child(1)')
+    // await page.waitForSelector('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(6) > div.pseudoHover > input[type=checkbox]')
+    
+    // Export subpages
+    // await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(6) > div.pseudoHover > input[type=checkbox]')
+
+
+    // Select MD type
+    await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(3) > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) div[role=menu] div[role=menuitem]:nth-child(3)')
+    // await page.waitForSelector('#notion-app > div > div.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(4) > div.pseudoHover.pseudoActive > input[type=checkbox]')
+
+    // Just wait.
+    await page.waitForTimeout(1000);
+    
 
     // Export subpages
-    await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(6) > div.pseudoHover > input[type=checkbox]')
-
+    await page.click('#notion-app > div > div.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(4) > div.pseudoHover.pseudoActive > input[type=checkbox]')
+    
+    
     // Listen download progress event
     const downloadCompletedEvent = waitUntilDownload(client)
 
-    // Download file
-    await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(8) > div[role=button]:nth-child(2)')
+    // Download file as PDF
+    // await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(8) > div[role=button]:nth-child(2)')
+    
+    // Download file as MD
+    await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(6) > div[role=button]:nth-child(2)')
 
     // Wait download completed event
     await downloadCompletedEvent;
