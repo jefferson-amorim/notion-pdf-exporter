@@ -29,7 +29,7 @@ async function waitUntilDownload(client) {
 }
 
 async function exportPdf({ notionUrl, notionCookies }) {
-    const browser = await puppeteer.launch({headless: false, })// .launch({headless: 'new', });
+    const browser = await puppeteer.launch({headless: 'new', })// .launch({headless: 'new', });
     const page = await browser.newPage();
     const client = await page.target().createCDPSession();
 
@@ -37,7 +37,7 @@ async function exportPdf({ notionUrl, notionCookies }) {
 
     await client.send('Browser.setDownloadBehavior', {
         behavior: 'allow',
-        downloadPath: `${process.cwd()}/downloads`,
+        downloadPath: `${process.cwd()}/bkp/teams_db`,
         eventsEnabled: true,
     });
 
@@ -55,13 +55,12 @@ async function exportPdf({ notionUrl, notionCookies }) {
     await page.waitForSelector('.notion-scroller.vertical > div[role=menu]');
 
     // Wait for connection menu items.
-    await page.waitForTimeout(10000);
+    await page.waitForTimeout(7000);
 
     // Wait for export menuitem
     await page.waitForSelector('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div:nth-child(2) > div > div > div > div > div > div:nth-child(1) > div:nth-child(7) > div:nth-child(2)');
 
     // Open export modal
-    // await page.click("#id_50")
     await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div:nth-child(2) > div > div > div > div > div > div:nth-child(1) > div:nth-child(7) > div:nth-child(2)');
     await page.waitForSelector('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(1) > div[role=button]');
 
@@ -83,12 +82,21 @@ async function exportPdf({ notionUrl, notionCookies }) {
 
     // Just wait.
     await page.waitForTimeout(1000);
-    
+
+    // Open Include databases options
+    await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(2) > div:nth-child(2)')
+    await page.waitForSelector('#notion-app > div > div.notion-overlay-container.notion-default-overlay-container > div:nth-child(3) > div > div:nth-child(2) > div:nth-child(2) > div > div > div > div > div > div > div > div:nth-child(1)');
+
+    // Select Current view
+    await page.click('#notion-app > div > div.notion-overlay-container.notion-default-overlay-container > div:nth-child(3) > div > div:nth-child(2) > div:nth-child(2) > div > div > div > div > div > div > div > div:nth-child(1)');
+    // await page.click('.notion-overlay-container.notion-default-overlay-container > div:nth-child(3) > div > div:nth-child(2) > div:nth-child(2) > div > div > div > div > div > div > div > div:nth-child(1)')
+
+    // Just wait.
+    await page.waitForTimeout(1000);
 
     // Export subpages
     await page.click('#notion-app > div > div.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(4) > div.pseudoHover.pseudoActive > input[type=checkbox]')
-    
-    
+
     // Listen download progress event
     const downloadCompletedEvent = waitUntilDownload(client)
 
